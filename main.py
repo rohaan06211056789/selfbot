@@ -52,7 +52,7 @@ async def on_message(msg):
     if msg.author != client.user:
         return
     
-    #purge, sb!purge
+    #purge, {PREFIX}purge
     if msg.content.lower().startswith(f"{PREFIX}purge"):
         parts = msg.content.split()
         if len(parts) > 1:
@@ -95,7 +95,7 @@ async def on_message(msg):
         log("info",f"purge complete! scanned {scanned}, deleted {deleted}, failed {failed}")
         print()
     
-    #reaction spam, sb!react <count> <emoji>
+    #reaction spam, {PREFIX}react <count> <emoji>
     if msg.content.lower().startswith(f"{PREFIX}react"):
         parts = msg.content.split()
         if len(parts) < 3:
@@ -130,7 +130,7 @@ async def on_message(msg):
                 continue
         log("info",f"finished reacting to {count} msgs.")
     
-    #reaction remover, sb!removereacts
+    #reaction remover, {PREFIX}removereacts
     if msg.content.lower().startswith(f"{PREFIX}removereacts"):
         parts = msg.content.split()
         limit = PURGE_LIMIT
@@ -169,7 +169,7 @@ async def on_message(msg):
         log("info",f"successfully cleared reactions on {count} msgs, failed {failed}")
         print()
 
-    #chat export, sb!export
+    #chat export, {PREFIX}export
     if msg.content.lower().startswith(f"{PREFIX}export"):
         parts = msg.content.split()
         channel_id = msg.channel.id
@@ -187,7 +187,7 @@ async def on_message(msg):
         if len(parts) > 1:
             try:
                 limit = int(parts[1])
-                cmd += ["--after",parts[1]] #i.e sb!export 2026-03-20
+                cmd += ["--after",parts[1]] #i.e {PREFIX}export 2026-03-20
             except ValueError:
                 log("error",f"invalid arg '{parts[1]}'")
                 return
@@ -243,7 +243,7 @@ async def on_message(msg):
         else:
             log("error", f"export failed: {result.stderr.strip()}")
 
-    #timed messages, sb!msgsend
+    #timed messages, {PREFIX}msgsend
     if msg.content.lower().startswith(f"{PREFIX}msgsend"):
         parts = msg.content.split(maxsplit=2)
         if len(parts) < 3:
@@ -277,7 +277,7 @@ async def on_message(msg):
         await channel.send(text)
         log("info",f"sent scheduled msg: \"{text[:60]}\"")
 
-    #timed message delete, sb!msgdelete
+    #timed message delete, {PREFIX}msgdelete
     if msg.content.lower().startswith(f"{PREFIX}msgdelete"):
         parts = msg.content.split()
         if len(parts) < 3:
@@ -320,7 +320,7 @@ async def on_message(msg):
             log("error", f"hit discord.HTTPException-{e}")
 
     
-    #spam, sb!spam <count> <phrase>
+    #spam, {PREFIX}spam <count> <phrase>
     if msg.content.lower().startswith(f"{PREFIX}spam"):
         parts = msg.content.split(maxsplit=2)
         if len(parts) < 3:
@@ -354,7 +354,7 @@ async def on_message(msg):
                 await asyncio.sleep(2)
         log("info",f"finished spamming {count} times!")
     
-    #ai, sb!ai
+    #ai, {PREFIX}ai
     if msg.content.lower().startswith(f"{PREFIX}ai"):
         parts = msg.content.split(maxsplit=1)
         if len(parts) < 2:
@@ -404,23 +404,22 @@ async def on_message(msg):
 if __name__=='__main__':
     print('\nThe original bot was not made by me, I just added a few changes to it. \n\n')
     print('Keep in mind the export command only works on linux, that was intentional')
-    print('COMMANDS: \n\nsb!purge(msgs)\nsb!react(iterations)(emoji)\nsb!export\nsb!spam(iterations)\nsb!removereacts\nTheres a few more but I honestly dont think anyone is gonna use them\n')
+    print(f'COMMANDS: \n\n{PREFIX}purge(msgs)\n{PREFIX}react(iterations)(emoji)\n{PREFIX}export\n{PREFIX}spam(iterations)\n{PREFIX}removereacts\nTheres a few more but I honestly dont think anyone is gonna use them\n')
     with open("token.txt") as f:
     	TOKEN = f.read().strip()
     if not TOKEN:
-        TOKEN = input("Enter your discord token (it's stored locally, dw): ").strip()
+        TOKEN = input("Invalid Token,Enter your discord token: ").strip()
         with open("token.txt", "w") as f:
             f.write(TOKEN)
     with open("key.txt") as e:
     	AI_KEY = e.read().strip()
     if not AI_KEY:
-        AI_KEY = input('(OPTIONAL) Enter ai key to use sb!ai (u can dm me for one but i probably wont have any): ').strip()
+        AI_KEY = input(f'OPTIONAL, Enter ai key to use {PREFIX}ai: ').strip()
         if AI_KEY:
             with open("key.txt", "w") as f:
                 f.write(AI_KEY)
     else:
-        print('Using ai key:\n',AI_KEY)
+        print('Using ai key:\n', AI_KEY)
     DCE_CLI = "./exporter/DiscordChatExporter.Cli"
 
     client.run(TOKEN)
-
