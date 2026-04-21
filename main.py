@@ -402,7 +402,7 @@ async def on_message(msg):
             await msg.edit(content="AI request failed.")
 
 if __name__=='__main__':
-    print('\nThe original bot was not made by me, I just added a few changes to it. \n\n')
+    print('\nThis was completley skidded. \n\n')
     print('Keep in mind the export command only works on linux, that was intentional')
     print(f'COMMANDS: \n\n{PREFIX}purge(msgs)\n{PREFIX}react(iterations)(emoji)\n{PREFIX}export\n{PREFIX}spam(iterations)\n{PREFIX}removereacts\nTheres a few more but I honestly dont think anyone is gonna use them\n')
     with open("token.txt") as f:
